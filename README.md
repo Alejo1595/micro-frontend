@@ -88,3 +88,50 @@ Este plugin nos va a permitir configurar nuestro micro-front. Para tener mas inf
    - type: El tipo de Micro-frontend que será, en este caso será de tipo remote que basicamente indica que es una parte de nuestro Micro-front.
 
 Con estos dos comandos se van configurar y modificar varios archivos de nuestro workspace para que nuestro micro-frontend funcione.
+
+## Configurando Webpack
+
+Si nos ubicamos en el archivo **webpack.config.js** de nuestro proyecto shell, vamos a encontrar las siguientes secciones:
+
+- Una sección llamada remotes. En esta sección basicamente podemos configurar los demas micro-frontends que podemos consumir. Para consumirlos las aplicaciones remote (products en este caso) debemos tener un bundle de javascript de dicha aplicación.
+
+  ```ts
+  remotes: {
+      products: "http://localhost:4200/remoteEntry.js",
+    },
+  ```
+
+- Una sección llamada shared: Es esta sección estamos indicando que estamos compartiendo todas nuestras dependencias con los demas micro-fronted
+
+  ```ts
+  shared: {
+    ...shareAll({
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: "auto",
+    }),
+  },
+  ```
+
+  - singleton: true: Indica que solamente tenemos una unica instancia de los vendor.
+  - strictVersion: true y requiredVersion: Estamos limitando que las versiones de nuestros paquetes sean las mismas, es decir si tenemos una dependencia llamada **alejoDev** en su version 1.0.0 este paquede debe tener la misma versión tanto en el host como en los remotes.
+
+A continuación vamos a ver la configuracion de un **webpack.config.js** de un proyecto remote, en el vamos a encontrar secciones muy parecidas con la diferencia de:
+
+- expose: en ella vamos a poder agrupar el modulo o los modulos que deseamos compartir desde nuestra aplicación remote.
+
+  ```ts
+  exposes: {
+    "./Component": "./projects/products/src/app/app.component.ts",
+  },
+  ```
+
+  En el ejemplo anterior estamos exponiendo el **app.componente.ts** de nuestro proyecto de **products** con el nombre **./Component**.
+
+Para ejecutar nuestro micro-frontend podemos usar el siguiente comando:
+
+```ts
+npm run run:all
+```
+
+Este comando fue configurado cuando hicimos las configuraciones de angular-architects/module-federation
