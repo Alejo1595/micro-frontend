@@ -58,3 +58,33 @@ A continuación vamos a crear los demas micro-fronteds de nuestra aplicación us
 ```ts
 ng g application products
 ```
+
+## Implementando angular-architects/module-federation
+
+Este plugin nos va a permitir configurar nuestro micro-front. Para tener mas información podemos visitar el [repositorio oficial](https://github.com/angular-architects/module-federation-plugin/blob/main/libs/mf/README.md). Una versión resumida de los pasos son:
+
+1. Determinamos cual va a ser nuestra aplicación host por medio del siguiente comando
+
+   ```ts
+    ng add @angular-architects/module-federation --project [nombre_proyecto] --port 5500 --type host
+   ```
+
+   Usamos el schematic @angular-architects/module-federation y le indicamos:
+
+   - project: Nombre del proyecto que sera el host de nuestro Micro-front, en este caso sería el proyecto shell.
+   - port: El puerto por el cual va a correr nuestra app.
+   - type: El tipo de Micro-frontend que será, en este caso será de tipo host que basicamente indica que es la parte principal de nuestro Micro-front.
+
+2. Configurar los Micro-frontend que integraran nuestra app. Para ello usamos el siguiente comando:
+
+   ```ts
+   ng add @angular-architects/module-federation --project [nombre_producto] --port 5600 --type remote
+   ```
+
+   Usamos el schematic @angular-architects/module-federation y le indicamos:
+
+   - project: Nombre del proyecto que hara parte de nuestro Micro-front, en este caso sería el proyecto products.
+   - port: El puerto por el cual va a correr nuestra ese proyecto.
+   - type: El tipo de Micro-frontend que será, en este caso será de tipo remote que basicamente indica que es una parte de nuestro Micro-front.
+
+Con estos dos comandos se van configurar y modificar varios archivos de nuestro workspace para que nuestro micro-frontend funcione.
