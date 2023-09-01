@@ -3,11 +3,11 @@ const {
   withModuleFederationPlugin,
 } = require("@angular-architects/module-federation/webpack");
 
-module.exports = withModuleFederationPlugin({
+const productMF = withModuleFederationPlugin({
   name: "products",
 
   exposes: {
-    "./Component": "./projects/products/src/app/app.component.ts",
+    "./listProduct": "./projects/products/src/app/products/products.module.ts",
   },
 
   shared: {
@@ -18,3 +18,7 @@ module.exports = withModuleFederationPlugin({
     }),
   },
 });
+
+productMF.output.publicPath = "http://localhost:5600/";
+
+module.exports = productMF;

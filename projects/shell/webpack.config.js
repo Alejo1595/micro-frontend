@@ -3,11 +3,7 @@ const {
   withModuleFederationPlugin,
 } = require("@angular-architects/module-federation/webpack");
 
-module.exports = withModuleFederationPlugin({
-  remotes: {
-    products: "http://localhost:4200/remoteEntry.js",
-  },
-
+const mfShell = withModuleFederationPlugin({
   shared: {
     ...shareAll({
       singleton: true,
@@ -16,3 +12,7 @@ module.exports = withModuleFederationPlugin({
     }),
   },
 });
+
+mfShell.output.publicPath = 'http://localhost:5500/'
+
+module.exports = mfShell;

@@ -135,3 +135,90 @@ npm run run:all
 ```
 
 Este comando fue configurado cuando hicimos las configuraciones de angular-architects/module-federation
+
+## Configurar Remote Shell
+
+Configurar nuestro remote shell nos permite ejecutar comandos en los diferentes micro frontends y realizar tareas de administración desde un punto de control.
+
+Veamos como configurar los remote shell nuestro micro frontend. Lo primero que haremos es acceder al **webpack.config.js** de nuestro proyecto **product** y accedemos a los **exposes** en donde podremos exponer los elementos de nuestro proyecto para que sean consumidos por nuestro proyecto shell.
+
+Para el ejemplo hemos realizado acciones tipicas de un proyecto angular como crear un modulo y sus componentes, configurar sus rutas y usar el **router-outlet** para mostrar la información. El paso siguiente es exponer dicho modulo en la sección **exposes** de su respectivo webpack.config.js, algo parecido a lo siguiente:
+
+```ts
+exposes: {
+  // "./nombre_exposedModule": "Path del elemento a exponer",
+  "./listProduct": "./projects/products/src/app/products/products.module.ts",
+},
+```
+
+Con esta configuración hemos creado y configurado un modulo de nuestro micro-frontend para ser consumido desde nuestra shell.
+
+Para consumir micro-frontend de manera dinamica, es decir como si fuera un modulo más de nuestra aplicación shell, usamos la función **loadRemoteModule** de **@angular-architects/module-federation**. Veamos como:
+
+```ts
+import { loadRemoteModule } from "@angular-architects/module-federation";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+
+const routes: Routes = [
+  {
+    path: "products",
+    loadChildren: () =>
+      loadRemoteModule({
+        type: "module",
+        remoteEntry: "http://localhost:5600/remoteEntry.js",
+        exposedModule: "./listProduct",
+      }),
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
+```
+
+En el ejemplo anterior vemos que estamos creado un ruta que tiene su path pero que en lugar de llamar a un modulo o un componente, esta llamando a todo un micro-frontend por medio de la la función **loadRemoteModule** de **@angular-architects/module-federation**. En la función pasamos la siguiente información:
+
+- type: El tipo de elemento que va a cargar. Puede ser manifets, module o script.
+- remoteEntry: Es la ruta de acceso al remote entry de nuestro micro-front a cargar.
+- exposedModule: Nombre que le colocamos al elemento que se expuso de nuestro micro-front.
+
+Por ultimo solamente debemos usar nuestro **router-outlet** en el **app.componente.html** de nuestro proyecto shell, lanzar nuestra aplicación y acceder a la ruta /products para que nuestro micro-front **products** sea cargado de manera dinamica desde nuestra shell.
+
+### Nota
+
+Al momento de cargar nuestros micro-front nos va a lanzar un error debido a que no hemos definido la propiedad publicPath. Para configutar esta propiedad debemos realizar los siguientes pasos:
+
+1. En nuestro **webpack.config.js**, en lugar de exponer directamente nuestro withModuleFederationPlugin lo guardamos en una constante.
+
+2. por medio de la constante accedemos a la propiedad output y de ahí a la propiedad publicPath y asignamos la ruta de acceso a nuestro micro-frontend.
+
+3. exportamos la constante que creamos de nuestro micro-frontend products.
+
+Veamos un ejemplo:
+
+```ts
+const { shareAll, withModuleFederationPlugin } = require("@angular-architects/module-federation/webpack");
+
+const productMF = withModuleFederationPlugin({
+  name: "products",
+
+  exposes: {
+    "./listProduct": "./projects/products/src/app/products/products.module.ts",
+  },
+
+  shared: {
+    ...shareAll({
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: "auto",
+    }),
+  },
+});
+
+productMF.output.publicPath = "http://localhost:5600/";
+
+module.exports = productMF;
+```
