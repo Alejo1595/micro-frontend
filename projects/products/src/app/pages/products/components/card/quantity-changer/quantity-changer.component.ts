@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { SvgMinusComponent } from './components/svg-minus/svg-minus.component';
 import { SvgPlusComponent } from './components/svg-plus/svg-plus.component';
+import { QuantityProductChanged } from '../../../models/product';
 
 @Component({
   selector: 'app-quantity-changer',
@@ -20,7 +21,7 @@ export class QuantityChangerComponent {
   public productId!: number;
 
   @Output()
-  public quantityProductChanged = new EventEmitter();
+  public quantityProductChanged = new EventEmitter<QuantityProductChanged>();
 
   public count = 0;
 

@@ -1,1 +1,5 @@
-<h1>Lista de productos</h1>
+<section>
+  <ng-container *ngIf="product$ | async as products">
+    <app-card *ngFor="let product of products" [product]="product" />
+  </ng-container>
+</section>

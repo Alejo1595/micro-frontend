@@ -7,7 +7,7 @@ const productMF = withModuleFederationPlugin({
   name: "products",
 
   exposes: {
-    "./listProduct": "./projects/products/src/app/pages/products/products.module.ts",
+    "./listProduct": "./projects/products/src/app/pages/products/products.component.ts",
   },
 
   shared: {

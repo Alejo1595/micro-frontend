@@ -1,1 +1,16 @@
-<p>card works!</p>
+<section>
+  <img [ngSrc]="product.image" [alt]="product.title" width="300" height="260" />
+  <h2>{{ product.title }}</h2>
+  <span>{{ product.category | titlecase }}</span>
+  <span>{{ product.price | currency }}</span>
+  <app-quantity-changer
+    [productId]="product.id"
+    (quantityProductChanged)="onQuantityProductChange($event)"
+  />
+  <app-add-to-card
+    [productId]="product.id"
+    (addProduct)="onAddProduct($event)"
+  />
+
+  <p *ngIf="false">Product added....</p>
+</section>
