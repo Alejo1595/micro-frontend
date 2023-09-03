@@ -10,7 +10,7 @@ import { SvgCardComponent } from './svg-card/svg-card.component';
 @Component({
   selector: 'app-add-to-card',
   template: `
-    <button (click)="addToCard()">
+    <button (click)="addToCard()" class="bg-gray-300 p-1.5 rounded-md text-lg">
       <app-svg-card />
     </button>
   `,

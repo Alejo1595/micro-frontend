@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ProductService {
-  private readonly API = 'https://fakestoreapi.com/products';
+  private readonly API = 'https://api.escuelajs.co/api/v1/products';
   private readonly http = inject(HttpClient);
 
   public getProducts = (): Observable<Product[]> => {

@@ -1,19 +1,20 @@
 import { Component, Input } from '@angular/core';
 import { Product, QuantityProductChanged } from '../../models/product';
-import { CurrencyPipe, NgIf, NgOptimizedImage, TitleCasePipe } from '@angular/common';
+import { CurrencyPipe, NgIf, TitleCasePipe } from '@angular/common';
 import { AddToCardComponent } from './add-to-card/add-to-card.component';
 import { QuantityChangerComponent } from './quantity-changer/quantity-changer.component';
+import { ImageComponent } from './image/image.component';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
   imports: [
-    NgOptimizedImage,
     TitleCasePipe,
     CurrencyPipe,
     AddToCardComponent,
     QuantityChangerComponent,
     NgIf,
+    ImageComponent
   ],
   standalone: true,
 })
