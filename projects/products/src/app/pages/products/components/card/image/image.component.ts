@@ -1,18 +1,12 @@
-import {
-  NgIf,
-  NgOptimizedImage,
-  NgStyle,
-  provideImageKitLoader,
-} from '@angular/common';
+import { NgIf, NgOptimizedImage, NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { SkeletonImageComponent } from './skeleton-image/skeleton-image.component';
 
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgStyle, NgIf, SkeletonImageComponent, NgOptimizedImage],
+  imports: [NgStyle, NgIf, NgOptimizedImage],
 })
 export class ImageComponent {
   @Input()
@@ -28,6 +22,7 @@ export class ImageComponent {
   }
 
   onLoad() {
+    console.log('llamado');
     this.hasLoaded = true;
   }
 }

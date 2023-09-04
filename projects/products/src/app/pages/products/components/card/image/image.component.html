@@ -1,14 +1,10 @@
-<!-- TODO Implementar la directiva ngSrc para ver como puedo hacer que cargue una imagen skeleton y hacer un scroll infinito -->
+<!-- hacer un scroll infinito -->
 <div class="w-full h-full">
   <img
-    [src]="url"
+    [ngSrc]="url"
     [alt]="alt"
-    (load)="onLoad()"
-    width="100"
-    height="150"
+    width="640"
+    height="640"
     class="h-full w-full object-cover rounded-t-md animate-fadeIn"
-    [ngStyle]="{ display: hasLoaded ? '' : 'none' }"
   />
-
-  <app-skeleton-image *ngIf="!hasLoaded" />
 </div>
