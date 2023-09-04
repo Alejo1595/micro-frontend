@@ -1,5 +1,18 @@
-<section class="container mx-auto h-96 px-4 sm:px-0 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-  <ng-container *ngIf="product$ | async as products">
+<section
+  class="container mx-auto h-full px-4 md:px-0 grid gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+  infiniteScroll
+  [infiniteScrollDistance]="3"
+  (scrolled)="onScroll()"
+>
+  <ng-container *ngIf="products.length > 0">
     <app-card *ngFor="let product of products" [product]="product" />
   </ng-container>
+
+  <button
+    *ngIf="isShowButton"
+    (click)="onTopScroll()"
+    class="fixed bottom-10 right-4 h-9 w-9 animate-fadeIn bg-gray-300 border border-black rounded-full flex items-center justify-center"
+  >
+    🔼
+  </button>
 </section>

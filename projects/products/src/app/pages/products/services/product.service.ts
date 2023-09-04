@@ -8,9 +8,9 @@ export class ProductService {
   private readonly API = 'https://api.escuelajs.co/api/v1/products';
   private readonly http = inject(HttpClient);
 
-  public getProducts = (): Observable<Product[]> => {
+  public getProducts = (limit = 10, offset = 0): Observable<Product[]> => {
     return this.http
-      .get<Product[]>(this.API)
+      .get<Product[]>(`${this.API}/?offset=${offset}&limit=${limit}`)
       .pipe(map((products) => products.sort(() => Math.random() - 0.5)));
   };
 
