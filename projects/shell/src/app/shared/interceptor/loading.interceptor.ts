@@ -16,7 +16,6 @@ export class LoadingInterceptor implements HttpInterceptor {
     req: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    console.log('Llamando al interceptor');
     this.loadingSvc.start();
     return next.handle(req).pipe(finalize(() => this.loadingSvc.stop()));
   }

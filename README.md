@@ -222,3 +222,44 @@ productMF.output.publicPath = "http://localhost:5600/";
 
 module.exports = productMF;
 ```
+
+## Datos de deploy
+
+```ts
+Site Created NAVBAR
+
+Admin URL: https://app.netlify.com/sites/navbar-react-mf
+URL:       https://navbar-react-mf.netlify.app
+Site ID:   98424071-04bb-4fbd-8e78-27df525ffe42
+
+Site already linked to "undefined"
+Admin url: undefined
+
+To unlink this site, run: netlify unlink
+
+------
+
+Site Created SHELL
+
+Admin URL: https://app.netlify.com/sites/shell-mf
+URL:       https://shell-mf.netlify.app
+Site ID:   7cafb103-35e5-4834-bdbe-24fe643bb70c
+
+Site already linked to "undefined"
+Admin url: undefined
+
+To unlink this site, run: netlify unlink
+
+------
+
+Site Created PRODUCTS
+
+Admin URL: https://app.netlify.com/sites/products-mf
+URL:       https://products-mf.netlify.app
+Site ID:   92b75c21-fc8a-451e-8259-f130d1ce256d
+
+Site already linked to "undefined"
+Admin url: undefined
+
+To unlink this site, run: netlify unlink
+```

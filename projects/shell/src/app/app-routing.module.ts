@@ -4,11 +4,16 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/products',
+    pathMatch: 'full'
+  },
+  {
     path: 'products',
     loadComponent: () =>
       loadRemoteModule({
         type: 'module',
-        remoteEntry: 'http://localhost:5600/remoteEntry.js',
+        remoteEntry: 'https://products-mf.netlify.app/remoteEntry.js',
         exposedModule: './listProduct',
       }),
   },

@@ -6,15 +6,21 @@ import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
 import { LoadingComponent } from './shared/components/loading/loading.component';
+import { NabvarReactComponent } from './shared/components/nabvar-react/nabvar-react.component';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, LoadingComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    LoadingComponent,
+    NabvarReactComponent,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
-      multi: true
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],

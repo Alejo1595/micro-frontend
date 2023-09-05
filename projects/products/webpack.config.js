@@ -19,6 +19,6 @@ const productMF = withModuleFederationPlugin({
   },
 });
 
-productMF.output.publicPath = "http://localhost:5600/";
+productMF.output.publicPath = "https://products-mf.netlify.app/";
 
 module.exports = productMF;

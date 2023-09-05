@@ -5,7 +5,7 @@ import { LoadingService } from '../../services/loading.service';
 @Component({
   selector: 'loading',
   template: `
-    <div class="overlay" *ngIf="isLoading$ | async">
+    <div class="overlay animate-fadeIn" *ngIf="isLoading$ | async">
       Cargando los mejores productos...
     </div>
   `,
