@@ -7,7 +7,8 @@ const productMF = withModuleFederationPlugin({
   name: "products",
 
   exposes: {
-    "./listProduct": "./projects/products/src/app/pages/products/products.component.ts",
+    "./listProduct":
+      "./projects/products/src/app/pages/products/products.component.ts",
   },
 
   shared: {
@@ -19,6 +20,7 @@ const productMF = withModuleFederationPlugin({
   },
 });
 
-productMF.output.publicPath = "https://products-mf.netlify.app/";
+// productMF.output.publicPath = "https://products-mf.netlify.app/";
+productMF.output.publicPath = "http://localhost:5600/";
 
 module.exports = productMF;

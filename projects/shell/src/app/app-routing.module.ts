@@ -13,7 +13,7 @@ const routes: Routes = [
     loadComponent: () =>
       loadRemoteModule({
         type: 'module',
-        remoteEntry: 'https://products-mf.netlify.app/remoteEntry.js',
+        remoteEntry: 'http://localhost:5600/remoteEntry.js',
         exposedModule: './listProduct',
       }),
   },
