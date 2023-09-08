@@ -1,6 +1,8 @@
-# Micro-frontend
+# Taller sobre Micro-frontend, Angular v16 y Qwik
 
-## ¿Qué son los Micro-frontends?
+## Micro-frontend
+
+### ¿Qué son los Micro-frontends?
 
 El micro-frontend no es mas que una separación tecnica de un dominio o subdomino de nuestro negocio. Al saber que cada negocio tiene sus propias particularidades no hay un patrón establecido que nos indique como podemos dividir cada uno de los dominios o subdominio. Por ejemplo podemos tener un header y un navbar en un unico micro-frontend pero pueden existir casos en los cuales cada uno de estos elementos pueden ser un micro-front por aparte.
 
@@ -8,7 +10,7 @@ Cada microfront que tengamos puede ser creado con una tecnología diferente, por
 
 Finalmente una regla que se debe seguir al momento de trabajar con Micro-frontends es que estos no deben compartir información entre ellos para que cada dominio o subdominio sea independiente.
 
-## ¿Cuales empresas utilizan Micro-frontend?
+### ¿Cuales empresas utilizan Micro-frontend?
 
 Especificamente las siguientes empresas están usando Micro-frontend con Module federation:
 
@@ -19,11 +21,11 @@ Especificamente las siguientes empresas están usando Micro-frontend con Module 
 
 Esto indica que actualmente los Micro-frontend son una realidad y no una moda. Lo que se debe tener en cuenta es que esta tecnología se usa para grandes proyectos en donde exista cierta complejidad, grandes equipos y una logica que puede ser complicada de tratar como un todo. Tambien podemos considerar usar los Micro-frontend cuando vemos que nuestro negocio va creciendo.
 
-## Ventajas y desventajas de los Micro-frontend
+### Ventajas y desventajas de los Micro-frontend
 
 Como todo en la vida existe en balance entre las ventajas y las desventjas y los Micro-frontends no son la exepción. A continuación veremos algunas ventajas y desventajas de su uso:
 
-### Ventajas
+#### Ventajas
 
 - Desacoplamiento: Cada Micro-frontend lo podemos ver como un elemento que puede ser desarrollado, desplegado y testiado de manera totalmente independiente. Este punto permite que a nivel de desarrollo los equipos tengan mas libertar a la hora de crear o probar nuevas caracteristicas sin correr el riesgo de dañar o entorpecer el trabajo de otros equipos.
 
@@ -33,13 +35,13 @@ Como todo en la vida existe en balance entre las ventajas y las desventjas y los
 
 - Reducir el riesgo: Al tener un codigo desacoplado, que se pueda desarrollar por multiples equipos y que sea agnostico a la tecnologia nos va a permitir reducir el riesgo de fallos en nuestra aplicacion de manera significativa.
 
-### Desventajas
+#### Desventajas
 
 - Complejidad adicional: Al tener multiples entornos, repositorios,y CI/CD pipelines la complejidad del proceso de desarrollo puede aumentar.
 
 - Performance: Si un Micro-front no esta bien optimizado puede causar problemas en nuestra aplicación. Es por eso que debemos tener cuidado en especial en los momentos de carga inicial.
 
-## Creando el workspace
+### Creando el workspace
 
 Para los fines de este taller se va a crear un workspace que va a contener multiples aplicaciones. Usamos el siguiente comando para tener un workspace:
 
@@ -59,7 +61,7 @@ A continuación vamos a crear los demas micro-fronteds de nuestra aplicación us
 ng g application products
 ```
 
-## Implementando angular-architects/module-federation
+### Implementando angular-architects/module-federation
 
 Este plugin nos va a permitir configurar nuestro micro-front. Para tener mas información podemos visitar el [repositorio oficial](https://github.com/angular-architects/module-federation-plugin/blob/main/libs/mf/README.md). Una versión resumida de los pasos son:
 
@@ -89,7 +91,7 @@ Este plugin nos va a permitir configurar nuestro micro-front. Para tener mas inf
 
 Con estos dos comandos se van configurar y modificar varios archivos de nuestro workspace para que nuestro micro-frontend funcione.
 
-## Configurando Webpack
+### Configurando Webpack
 
 Si nos ubicamos en el archivo **webpack.config.js** de nuestro proyecto shell, vamos a encontrar las siguientes secciones:
 
@@ -136,7 +138,7 @@ npm run run:all
 
 Este comando fue configurado cuando hicimos las configuraciones de angular-architects/module-federation
 
-## Configurar Remote Shell
+### Configurar Remote Shell
 
 Configurar nuestro remote shell nos permite ejecutar comandos en los diferentes micro frontends y realizar tareas de administración desde un punto de control.
 
@@ -223,7 +225,7 @@ productMF.output.publicPath = "http://localhost:5600/";
 module.exports = productMF;
 ```
 
-## Datos de deploy
+### Datos de deploy
 
 ```ts
 Site Created NAVBAR
@@ -263,3 +265,69 @@ Admin url: undefined
 
 To unlink this site, run: netlify unlink
 ```
+
+## Angular 16
+
+### Standalone Components
+
+Los standalone components son componentes, pipes o directivas que no necesitan estar dentro de un modulo para existir ya que el mismo es autonomo y puede invocar los elementos que necesite para cumplir su función.
+
+Se recomienda leer el siguiente [articulo](https://codigoencasa.com/standalone-components-en-angular/) para conocer mucho más a fondo sobre los standalone component.
+
+Para crear un standalone componente podemos:
+
+1. Usar el siguiente comando:
+
+   ```ts
+   ng generate componente [path/component_name] --standalone
+   ```
+
+2. Usar la propiedad **standalone: true** en el @ngComponente para convertir un componente creado un standalone.
+
+   ```ts
+   @Component({
+     selector: "app-test",
+     templateUrl: "./test.component.html",
+     standalone: true,
+   })
+   export class TestComponent {}
+   ```
+
+Si necesitamos importar o injectar algún modulo o servicio lo podemos hacer la siguiente manera:
+
+```ts
+@Component({
+  selector: "app-test",
+  templateUrl: "./test.component.html",
+  standalone: true,
+  imports: [TitleCasePipe, CurrencyPipe, AddToCardComponent, QuantityChangerComponent, NgIf, ImageComponent],
+  providers: [TestServices],
+})
+export class TestComponent {}
+```
+
+En caso de que querramos aplicar lazy loading a un standalone componente debemos usar la siguiente función:
+
+```ts
+ {
+    path: 'test',
+    loadComponent: () => import('Path_standalone_componente').then(mod => mod.ComponentName)
+  },
+```
+
+### Input Require
+
+Otra novedad que viene en Angular 16 es que ahora podemos indicar si un input es requerido o no, para hacerlo usamos la siguiente sintaxis:
+
+```ts
+@Component({
+  selector: "app-test",
+  templateUrl: "./test.component.html",
+  standalone: true,
+})
+export class TestComponent {
+  @Input({ required: true }) public productId!: string;
+}
+```
+
+De esta manera podemos asegurarnos de pedir la información que necesitemos para que nuestra aplicación no se rompa.

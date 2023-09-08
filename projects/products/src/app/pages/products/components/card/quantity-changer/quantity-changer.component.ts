@@ -17,7 +17,7 @@ import { QuantityProductChanged } from '../../../models/product';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuantityChangerComponent {
-  @Input()
+  @Input({ required: true })
   public productId!: number;
 
   @Output()

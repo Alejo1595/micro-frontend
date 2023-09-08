@@ -14,16 +14,18 @@ import { ImageComponent } from './image/image.component';
     AddToCardComponent,
     QuantityChangerComponent,
     NgIf,
-    ImageComponent
+    ImageComponent,
   ],
   standalone: true,
 })
 export class CardComponent {
-  @Input() public product!: Product;
+  @Input({ required: true }) public product!: Product;
 
   private productAndCount!: QuantityProductChanged;
 
-  public onQuantityProductChange(productAndCount: QuantityProductChanged): void {
+  public onQuantityProductChange(
+    productAndCount: QuantityProductChanged
+  ): void {
     this.productAndCount = productAndCount;
   }
 

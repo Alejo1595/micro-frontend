@@ -19,7 +19,7 @@ import { SvgCardComponent } from './svg-card/svg-card.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddToCardComponent {
-  @Input()
+  @Input({ required: true })
   public productId!: number;
 
   @Output()

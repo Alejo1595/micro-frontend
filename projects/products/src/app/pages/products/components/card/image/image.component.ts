@@ -9,10 +9,10 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [NgStyle, NgIf, NgOptimizedImage],
 })
 export class ImageComponent {
-  @Input()
+  @Input({ required: true })
   public url!: string;
 
-  @Input()
+  @Input({ required: true })
   public alt: string = '';
 
   public hasLoaded: boolean = false;
