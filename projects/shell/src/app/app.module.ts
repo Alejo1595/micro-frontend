@@ -7,9 +7,10 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoadingInterceptor } from './shared/interceptor/loading.interceptor';
 import { LoadingComponent } from './shared/components/loading/loading.component';
 import { NabvarReactComponent } from './shared/components/nabvar-react/nabvar-react.component';
+import { LoginComponent } from './components/auth/login/login.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoginComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

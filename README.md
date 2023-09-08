@@ -331,3 +331,45 @@ export class TestComponent {
 ```
 
 De esta manera podemos asegurarnos de pedir la información que necesitemos para que nuestra aplicación no se rompa.
+
+### Funciones como RouterGuards
+
+A partir de la versión 16 de Angular los guard que son los encargados de proteger nuestras rutas ya no se manejan con clases sino que se deben manejar con funciones: veamos un ejemplo:
+
+Tenemos el siguiente servicio que se encargara de indicar si un usuario esta o no autenticado:
+
+```ts
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+
+@Injectable({
+  providedIn: "root",
+})
+export class AuthService {
+  private readonly isLoggedIn$ = new BehaviorSubject<boolean>(true);
+
+  public isAuthenticated$ = (): Observable<boolean> => {
+    return this.isLoggedIn$.asObservable();
+  };
+}
+```
+
+Ahora veremos como es un guard por medio de una función:
+
+```ts
+import { inject } from "@angular/core";
+import { CanActivateFn, Router } from "@angular/router";
+import { AuthService } from "../services/auth.service";
+import { take, tap } from "rxjs";
+
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  return authService.isAuthenticated$().pipe(
+    take(1),
+    tap((isLoggedin) => (isLoggedin ? true : router.navigate(["/login"])))
+  );
+};
+```
+
+Vemos que la sintaxis es mucho mas simple y ya que es una función tambien funcionara mucho mas rapido.
