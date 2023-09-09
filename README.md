@@ -373,3 +373,26 @@ export const authGuard: CanActivateFn = (route, state) => {
 ```
 
 Vemos que la sintaxis es mucho mas simple y ya que es una función tambien funcionara mucho mas rapido.
+
+### Signals
+
+Los Signals son un nuevo modelo de reactividad implementado en [Solid.js](https://www.solidjs.com/) y que ha ganado mucha popularidad y que varios frameworks han ido implementando, entre ellos Angular. Veamos como es la estructura de un Signal en [Solid.js](https://www.solidjs.com/):
+
+```ts
+const [count, setCount] = createSignal(10);
+setInterval(() => setCount(count() + 1), 1000);
+return <div>Count {count()}</div>;
+```
+
+Vemos que tenemos una función llamada **createSignal** la cual nos entrega dos funciones: un **getter** y un **setter**. Si deseamos tener el valor del signal este no nos da directamente el valor sino que nos da una función (**getter**) que debemos ejecutar para saber cual es el valor actual del Signal. Este cambio es clave ya que si se compara con el hook useState de React en donde solo se obtiene el valor, la función **getter** que nos retornal el Signal por detras maneja todo un modelo de reactivid![Alt text](image.png)ad que permite a todos los interesados estar pendientes de su nuevo estado permitiendo asi saber exactamente cual fue el elemento que cambio debido a que se tiene el contexto de donde se ejecuto.
+![Signal SolidJS](images/signal_solidJS.png)
+
+Ahora veamos como en Angular se maneja esta detección de cambios por medio de zone.js. Primero que todo aclaremos que zone.js es una libreria que se encarga de crear un **contexto de ejecución** el cual esta pendiente de todas las peticiones asincronas que se realizan con el objetivo de saber si algo ha cambiado para luego ejecutar el Angular check detection (ciclo de vida de angular) que se encarga de verificar el arbol de componentes para ver si hubo cambios y por ultimo actualizar la vista.
+
+Se debe aclarar que zone.js primero verifica si algo ha cambiado para saber si tiene que actualizar algun componente pero en el caso de que deba actualizarse primero debera recorrer todo el arbol de componentes. En este punto es donde podemos tener algunas oportunidades de mejora gracias a los signals.
+
+![Zone js en Angular](images/zoneJs_angular.png)
+
+Ahora veamos cual es la nueva propuesta de reactividad en Angular por medio de los Signals. Gracias a los métodos **getter** y **setter** que nos proveen los Signal podemos saber cual es el contexto de ejecución y suscribirnos a él, de esta forma podemos conocer exactamente cual es el elemento que ha cambiado y actualizarlo sin necesidad de irlo a buscar por todo el arbol de componentes, en otras palabras se podría eliminar zoneJs.
+
+![Signal en Angular](images/signal_angular.png)
