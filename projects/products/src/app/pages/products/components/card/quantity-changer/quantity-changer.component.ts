@@ -4,6 +4,8 @@ import {
   EventEmitter,
   Input,
   Output,
+  effect,
+  signal,
 } from '@angular/core';
 import { SvgMinusComponent } from './components/svg-minus/svg-minus.component';
 import { SvgPlusComponent } from './components/svg-plus/svg-plus.component';
@@ -23,15 +25,26 @@ export class QuantityChangerComponent {
   @Output()
   public quantityProductChanged = new EventEmitter<QuantityProductChanged>();
 
-  public count = 0;
+  public count = signal(0);
+
+  constructor() {
+    effect(() => {
+      this.quantityProductChanged.emit({
+        productId: this.productId,
+        count: this.count(),
+      });
+    });
+  }
 
   public onDecrement = (): void => {
-    this.count--;
+    if (this.count() > 0) {
+      this.count.update((count) => count - 1);
+    }
   };
 
   public onIncrement = (): void => {
-    this.count++;
+    this.count.update((count) => count + 1);
   };
 
-  public isBtnDisabled = (): boolean => this.count === 0;
+  public isBtnDisabled = (): boolean => this.count() === 0;
 }

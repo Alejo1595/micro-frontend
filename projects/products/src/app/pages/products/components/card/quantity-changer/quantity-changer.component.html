@@ -1,7 +1,11 @@
 <div class="flex gap-4">
-  <button [disabled]="isBtnDisabled()" (click)="onDecrement()">
+  <button
+    [disabled]="isBtnDisabled()"
+    (click)="onDecrement()"
+    class="disabled: opacity-80"
+  >
     <app-svg-minus />
   </button>
-  <div>{{ count }}</div>
+  <div>{{ count() }}</div>
   <button (click)="onIncrement()"><app-svg-plus /></button>
 </div>

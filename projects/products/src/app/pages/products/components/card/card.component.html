@@ -1,12 +1,17 @@
 <figure class="bg-white shadow-md rounded-md h-96 animate-fadeIn">
   <div class="h-1/2">
-    <app-image [url]="product.images[0]" [alt]="product.title"/>
+    <app-image [url]="product.image" [alt]="product.title" />
   </div>
 
   <figcaption class="flex flex-col justify-around items-start h-1/2 p-3">
-    <h2 class="text-lg font-bold">{{ product.title }}</h2>
-    <span class="text-sm bg-gray-100 p-1 rounded-md">{{ product.category.name| titlecase }}</span>
+    <h2 class="w-full text-lg font-bold block truncate overflow-hidden">{{ product.title }}</h2>
+
+    <span class="text-sm bg-gray-100 p-1 rounded-md">
+      {{ product.category | titlecase }}
+    </span>
+
     <span class="font-semibold">{{ product.price | currency }}</span>
+
     <div class="flex gap-2 items-center">
       <app-quantity-changer
         [productId]="product.id"
@@ -17,7 +22,7 @@
         (addProduct)="onAddProduct($event)"
       />
     </div>
-  </figcaption>
 
-  <p *ngIf="false">Product added....</p>
+    <p *ngIf="shouldShowProductAddedText()">Product added....</p>
+  </figcaption>
 </figure>
