@@ -3,14 +3,14 @@ import { Component, HostListener, inject } from '@angular/core';
 import { CardComponent } from './components/card/card.component';
 import { tap } from 'rxjs';
 import { Product } from './models/product';
-import { ProductService } from './services/product.service';
+import { ProductCustomService } from './services/productCustom.service';
 import { HttpClientModule } from '@angular/common/http';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   standalone: true,
-  providers: [ProductService],
+  providers: [ProductCustomService],
   imports: [
     NgIf,
     CardComponent,
@@ -28,7 +28,7 @@ export default class ProductsComponent {
   private readonly scrollHeight = 800;
 
   public document: Document = inject(DOCUMENT);
-  private readonly productSvc = inject(ProductService);
+  private readonly productSvc = inject(ProductCustomService);
 
   ngOnInit(): void {
     this.loadProducts();

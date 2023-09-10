@@ -404,3 +404,107 @@ Si revisamos mas a fondo nos podemos dar cuenta que cualquier interacción en el
 Es verdad que para mitigar este error podemos ejecutar estrategias de detección de cambios como la estrategia OnPush pero esta solución requiere tener un conocimiento de ngRx, conocer mejor el modelo de reactividad para saber como se esta mutando la información. En resumen esta solución puede ser complicada de implementar.
 
 ![Problema Clasico de ZoneJS](images/problema_clasico_zoneJs.png)
+
+### injección de dependencias como funciones
+
+Desde la versión 14 el equipo de Angular introdujo una función llamada **inject** la cual nos permite realizar injección de dependencias pero sin la necesidad de tener un constructor. Esta nueva funcionalidad nos otorga varias ventajas:
+
+- Permite trabajr no solo con clases sino tambien por medio de funciones:
+
+  Ejemplo de una función que se encarga de conectarse a una API por medio del httpClient
+
+  ```ts
+  import { Observable, map } from "rxjs";
+  import { Product } from "../models/product";
+  import { inject } from "@angular/core";
+  import { HttpClient } from "@angular/common/http";
+
+  const API = "https://fakestoreapi.com/products";
+
+  export const getProducts = (limit = 10, offset = 0): Observable<Product[]> => {
+    return inject(HttpClient)
+      .get<Product[]>(`${API}/?offset=${offset}&limit=${limit}`)
+      .pipe(map((products) => products.sort(() => Math.random() - 0.5)));
+  };
+  ```
+
+  Con el ejemplo anterior podemos ver que ahora se puede trabajar con funciones y no solamente con clases.
+
+- Evita que la herencia de clases sea un dolor de cabeza:
+
+  Supongamos que tenemos dos servicios, el servicios ProductService y ProductServiceCustom, ambos con la siguiente logica:
+
+  ```ts
+  import { Injectable, inject } from "@angular/core";
+  import { HttpClient } from "@angular/common/http";
+  import { ActivatedRoute } from "@angular/router";
+  import { Observable, map } from "rxjs";
+  import { Product } from "../models/product";
+
+  @Injectable()
+  export class ProductService {
+    private readonly API = "https://fakestoreapi.com/products";
+    constructor(private http: HttpClient, router: ActivatedRoute) {}
+
+    public getProducts = (limit = 10, offset = 0): Observable<Product[]> => {
+      return this.http.get<Product[]>(`${this.API}/?offset=${offset}&limit=${limit}`).pipe(map((products) => products.sort(() => Math.random() - 0.5)));
+    };
+
+    public getProductsById = (productID: number): Observable<Product> => {
+      return this.http.get<Product>(`${this.API}/${productID}`);
+    };
+  }
+  ```
+
+  ```ts
+  import { Injectable } from "@angular/core";
+  import { HttpClient } from "@angular/common/http";
+  import { ActivatedRoute } from "@angular/router";
+
+  @Injectable()
+  export class ProductServiceCustom extends ProductService {
+    constructor(private http: HttpClient, router: ActivatedRoute) {
+      super(http, router);
+    }
+  }
+  ```
+
+  Podemos observar en el codigo anterior que tenemos una herencia tipica de la POO. Ahora ¿Qué pasaría si la clase productService necesitara otra dependencia?. La respuesta es que todas sus clases hijas tambien deberían tener esa dependencia aun si no la usaran.
+
+  Este problema se resulve gracias a la función inject, veamos como:
+
+  ```ts
+  import { Injectable, inject } from "@angular/core";
+  import { Observable, map } from "rxjs";
+  import { Product } from "../models/product";
+  import { HttpClient } from "@angular/common/http";
+
+  @Injectable()
+  export class ProductService {
+    protected readonly API = "https://fakestoreapi.com/products";
+    protected readonly http = inject(HttpClient);
+
+    public getProducts = (limit = 10, offset = 0): Observable<Product[]> => {
+      return this.http.get<Product[]>(`${this.API}/?offset=${offset}&limit=${limit}`).pipe(map((products) => products.sort(() => Math.random() - 0.5)));
+    };
+  }
+  ```
+
+  ```ts
+  import { Injectable, inject } from "@angular/core";
+  import { ProductService } from "./product.service";
+  import { HttpClient } from "@angular/common/http";
+  import { Observable } from "rxjs";
+  import { Product } from "../models/product";
+
+  @Injectable()
+  export class ProductCustomService extends ProductService {
+    protected override http = inject(HttpClient);
+
+    public getProductsById = (productID: number): Observable<Product> => {
+      return this.http.get<Product>(`${this.API}/${productID}`);
+    };
+  }
+  ```
+
+  De esta manera podemos realizar herencia entre clases sin la necesidad de tener un constructor que me obligue a replicar las dependecias de la clase padre.
