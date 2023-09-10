@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-y-4">
+  <form class="flex gap-4" (ngSubmit)="addTask()" autocomplete="off">
+    <div class="flex gap-2 items-center">
+      <label for="new-task">New Task</label>
+      <input
+        #input
+        [value]="newTask()"
+        (input)="newTask.set(input.value)"
+        name="newTask"
+        type="text"
+        id="new-task"
+        class="border border-gray-400 py-1.5 px-2"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="bg-amber-600 py-1 px-4 text-white rounded font-semibold transition-colors duration-150 hover:bg-amber-500"
+    >
+      Add Task
+    </button>
+  </form>
+
+  <div>
+    <h3 class="text-center font-semibold">Task List Panel Left</h3>
+    <ul class="max-h-48 overflow-y-auto">
+      <li *ngFor="let task of listTask()" class="border-b pb-1">{{ task }}</li>
+    </ul>
+  </div>
+
+  <button
+    (click)="changesFirstTask()"
+    class="bg-blue-400 py-2 text-white rounded font-semibold transition-colors duration-150 hover:bg-blue-500"
+  >
+    Change First Tasks
+  </button>
+
+  <ng-container *ngIf="check()"></ng-container>
+</div>

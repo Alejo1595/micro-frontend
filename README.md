@@ -393,6 +393,14 @@ Se debe aclarar que zone.js primero verifica si algo ha cambiado para saber si t
 
 ![Zone js en Angular](images/zoneJs_angular.png)
 
-Ahora veamos cual es la nueva propuesta de reactividad en Angular por medio de los Signals. Gracias a los métodos **getter** y **setter** que nos proveen los Signal podemos saber cual es el contexto de ejecución y suscribirnos a él, de esta forma podemos conocer exactamente cual es el elemento que ha cambiado y actualizarlo sin necesidad de irlo a buscar por todo el arbol de componentes, en otras palabras se podría eliminar zoneJs.
+Ahora veamos cual es la nueva propuesta de reactividad en Angular por medio de los Signals. Gracias a los métodos **getter** y **setter** que nos proveen los Signals podemos saber cual es el contexto de ejecución y suscribirnos a él, de esta forma podemos conocer exactamente cual es el elemento que ha cambiado y actualizarlo sin necesidad de irlo a buscar por todo el arbol de componentes, en otras palabras se podría eliminar zoneJs.
 
 ![Signal en Angular](images/signal_angular.png)
+
+Veamos un ejemplo de un problema clasico que ocurre en ZoneJS: Podemos observar que tenemos dos componentes independientes que representan dos formularios para ingresar tareas.
+
+Si revisamos mas a fondo nos podemos dar cuenta que cualquier interacción en el formulario como: Darle focus a alguno de los dos inputs, o agregar una nueva tarea o actualizar la primera tarea lanza los eventos del otro formulario que en si son dos componentes independientes. Este problema se debe a que zoneJs detecta que hay un cambio pero no sabe exactamente en donde y es por eso que se ve obligado a recorrer todo el arbol de componentes para actualizar el render en base al cambio ocurrido.
+
+Es verdad que para mitigar este error podemos ejecutar estrategias de detección de cambios como la estrategia OnPush pero esta solución requiere tener un conocimiento de ngRx, conocer mejor el modelo de reactividad para saber como se esta mutando la información. En resumen esta solución puede ser complicada de implementar.
+
+![Problema Clasico de ZoneJS](images/problema_clasico_zoneJs.png)

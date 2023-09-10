@@ -21,6 +21,15 @@ const routes: Routes = [
       }),
   },
   {
+    path: 'register',
+    loadChildren: () =>
+      loadRemoteModule({
+        type: 'module',
+        remoteEntry: 'http://localhost:5700/remoteEntry.js',
+        exposedModule: './register',
+      }),
+  },
+  {
     path: 'login',
     component: LoginComponent,
   },
