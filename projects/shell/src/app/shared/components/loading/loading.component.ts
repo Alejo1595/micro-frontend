@@ -1,11 +1,15 @@
 import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import {
+  takeUntilDestroyed,
+  toSignal /* , toObservable */,
+} from '@angular/core/rxjs-interop';
 import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'loading',
   template: `
-    <div class="overlay animate-fadeIn" *ngIf="isLoading$ | async">
+    <div class="overlay animate-fadeIn" *ngIf="isLoadingFlat()">
       Cargando los mejores productos...
     </div>
   `,
@@ -34,8 +38,20 @@ export class LoadingComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
 
   public readonly isLoading$ = this.loadingSvc.isLoading$;
+  public isLoadingFlat = toSignal(this.isLoading$);
+  private destroyCtx = inject(DestroyRef);
 
+  // TODO ¿Hay forma de evitar la suscripción y utilizar el signal?
   ngOnInit(): void {
-    this.isLoading$.subscribe((res) => this.document.body.style.overflow = res ? 'hidden' : 'auto');
+    this.isLoading$
+      .pipe(takeUntilDestroyed(this.destroyCtx))
+      .subscribe(
+        (res) => (this.document.body.style.overflow = res ? 'hidden' : 'auto')
+      );
+
+    // Intento fallido
+    // toObservable(this.isLoadingFlat).subscribe(
+    //   (res) => (this.document.body.style.overflow = res ? 'hidden' : 'auto')
+    // );
   }
 }
