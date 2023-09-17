@@ -1,10 +1,12 @@
+import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-panel-right',
   templateUrl: './panel-right.component.html',
-  styleUrls: ['./panel-right.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [NgFor, NgIf],
 })
 export class PanelRightComponent {
   public newTask = signal('');

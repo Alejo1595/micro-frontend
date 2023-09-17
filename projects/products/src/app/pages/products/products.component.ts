@@ -16,7 +16,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     CardComponent,
     AsyncPipe,
     NgFor,
-    HttpClientModule,
     InfiniteScrollModule,
   ],
 })

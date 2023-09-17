@@ -1,5 +1,5 @@
-import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { AsyncPipe, DOCUMENT, JsonPipe, NgIf } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { LoadingService } from '../../services/loading.service';
 
 @Component({
@@ -29,7 +29,13 @@ import { LoadingService } from '../../services/loading.service';
   standalone: true,
   imports: [NgIf, AsyncPipe, JsonPipe],
 })
-export class LoadingComponent {
-  private loadingSvc = inject(LoadingService);
-  isLoading$ = this.loadingSvc.isLoading$;
+export class LoadingComponent implements OnInit {
+  private readonly loadingSvc = inject(LoadingService);
+  private readonly document = inject(DOCUMENT);
+
+  public readonly isLoading$ = this.loadingSvc.isLoading$;
+
+  ngOnInit(): void {
+    this.isLoading$.subscribe((res) => this.document.body.style.overflow = res ? 'hidden' : 'auto');
+  }
 }

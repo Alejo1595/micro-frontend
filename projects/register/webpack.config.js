@@ -5,7 +5,7 @@ const registerMF = withModuleFederationPlugin({
   name: 'register',
 
   exposes: {
-    './register': './projects/register/src/app/register/register.module.ts',
+    './register': './projects/register/src/app/app.component.ts',
   },
 
   shared: {

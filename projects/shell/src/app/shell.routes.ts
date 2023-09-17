@@ -1,10 +1,9 @@
 import { loadRemoteModule } from '@angular-architects/module-federation';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { authGuard } from './shared/guard/auth.guard';
 
-const routes: Routes = [
+export const shellRoutes: Routes = [
   {
     path: '',
     redirectTo: '/products',
@@ -22,7 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: () =>
+    loadComponent: () =>
       loadRemoteModule({
         type: 'module',
         remoteEntry: 'http://localhost:5700/remoteEntry.js',
@@ -34,9 +33,3 @@ const routes: Routes = [
     component: LoginComponent,
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
